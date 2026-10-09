@@ -13,6 +13,7 @@ const CATEGORIES = [
     products: [
       {
         id: "ezquil",
+        hook: "今晚就想睡？", br: "今晚<br>就想睡？", line: "喝一袋，困意自己来", key: "快速入睡", cut: "img/cut/ezquil.webp",
         img: "img/ezquil.jpg",
         color: "purple",
         want: "今晚想快点睡着",
@@ -27,6 +28,7 @@ const CATEGORIES = [
       },
       {
         id: "sanzoin",
+        hook: "累到睡不着？", br: "累到<br>睡不着？", line: "千年古方酸枣仁汤，<br>养好再睡", key: "身心调理", cut: "img/cut/sanzoin.webp",
         img: "img/sanzoin.jpg",
         color: "teal",
         want: "累了反而睡不着",
@@ -41,6 +43,7 @@ const CATEGORIES = [
       },
       {
         id: "melachew",
+        hook: "褪黑素党看这里", br: "褪黑素党<br>看这里", line: "一粒 2mg，蓝莓薰衣草味", key: "含褪黑素", cut: "img/cut/melachew.webp",
         img: "img/melachew.jpg",
         color: "amber",
         want: "习惯吃褪黑素",

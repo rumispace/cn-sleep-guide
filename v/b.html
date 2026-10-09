@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>B · 封面流</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,"Noto Sans SC",sans-serif;background:#F5F5F5;color:#222}
+.top{position:sticky;top:0;z-index:5;background:#fff;padding:calc(env(safe-area-inset-top) + 12px) 16px 0}
+.top h1{font-size:22px;font-weight:900}
+.tabs{display:flex;gap:22px;margin-top:10px;font-size:16px;color:#999;font-weight:600}
+.tabs span{padding-bottom:10px}.tabs .on{color:#222;font-weight:800;border-bottom:3px solid #FF2442}
+.grid{columns:2;column-gap:8px;padding:8px}
+.cv{break-inside:avoid;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:8px;display:block;text-decoration:none;color:inherit}
+.art{aspect-ratio:3/4;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:14px 12px}
+.art .t{font-size:27px;line-height:1.12;font-weight:900;letter-spacing:-.02em;position:relative;z-index:2}
+.art .t em{font-style:normal;background:#FFE14D;padding:0 3px;border-radius:3px}
+.art img{position:absolute;bottom:-4%;right:-6%;max-width:80%;max-height:66%;filter:drop-shadow(0 10px 14px rgba(0,0,0,.28));transform:rotate(-6deg)}
+.art .k{position:absolute;left:10px;bottom:12px;z-index:2;background:#FF2442;color:#fff;font-size:13px;font-weight:800;padding:5px 9px;border-radius:99px}
+.tall{aspect-ratio:3/4.4}
+.meta{padding:8px 10px 10px}
+.meta b{font-size:14px;line-height:1.35;display:block}
+.meta .u{display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:#888}
+.meta .u em{font-style:normal;color:#FF2442;font-weight:800;font-size:14px}
+.purple{background:#E5DEFF;color:#26186E}.green{background:#D8F1E5;color:#0A4434}.amber{background:#FFE8BF;color:#5A3100}.dark{background:#1F1A2E;color:#fff}
+
+.note{position:fixed;inset:0;background:#fff;z-index:20;overflow-y:auto;transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+.note.open{transform:none}
+.nb{position:sticky;top:0;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);z-index:2}
+.nb button{border:0;background:none;font-size:28px;line-height:1;padding:4px 8px}
+.nb .av{width:30px;height:30px;border-radius:50%;background:#1F1A2E;color:#FFD84D;display:flex;align-items:center;justify-content:center;font-size:15px}
+.nb b{font-size:15px}
+.hero{aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;position:relative}
+.hero img{max-width:72%;max-height:82%;filter:drop-shadow(0 20px 26px rgba(0,0,0,.3))}
+.hero .k{position:absolute;right:16px;top:16px;background:#FF2442;color:#fff;font-weight:900;font-size:18px;padding:8px 14px;border-radius:99px;transform:rotate(8deg)}
+.body{padding:18px 18px 40px}
+.body h2{font-size:30px;font-weight:900;line-height:1.2}
+.body p{font-size:20px;line-height:1.6;margin-top:10px;font-weight:600}
+.pr{display:flex;align-items:baseline;gap:10px;margin-top:18px}
+.pr b{font-size:38px;font-weight:900;color:#FF2442}.pr span{font-size:17px;color:#888;font-weight:700}
+.hash{margin-top:14px;font-size:16px;color:#2C5BA8;font-weight:600}
+.small{margin-top:16px;font-size:13px;color:#999}
+</style>
+</head>
+<body>
+<div class="top"><h1>睡眠好物</h1><div class="tabs"><span class="on">推荐</span><span>快速入睡</span><span>调理</span><span>褪黑素</span></div></div>
+<div class="grid" id="grid"></div>
+<div class="note" id="note"></div>
+<script src="../data.js"></script>
+<script>
+const ps = CATEGORIES[0].products, C = { purple: 'purple', teal: 'green', amber: 'amber' };
+const cny = n => Math.round(n / RATE);
+const hi = s => s.replace(/(睡|褪黑素)/, '<em>$1</em>');
+const cover = (p, i) => `<a class="cv" onclick="openNote('${p.id}')"><div class="art ${C[p.color]} ${i === 1 ? 'tall' : ''}">
+  <div class="t">${hi(p.br)}</div><img src="../${p.cut}" alt=""><span class="k">${p.key}</span></div>
+  <div class="meta"><b>${p.line}</b><div class="u"><span>${p.typeZh}</span><em>₩${p.price.toLocaleString()}</em></div></div></a>`;
+const intro = `<a class="cv" onclick="openNote('${ps[0].id}')"><div class="art dark tall"><div class="t" style="font-size:30px">韩国药店<br>睡眠好物<br><em style="color:#1F1A2E">3选1</em></div>
+  <div style="margin-top:auto;font-size:15px;opacity:.8;line-height:1.5">难入睡 · 累到失眠<br>· 褪黑素党</div></div>
+  <div class="meta"><b>药师帮你一秒选对</b><div class="u"><span>별하약국</span><span>♡ 收藏</span></div></div></a>`;
+document.getElementById('grid').innerHTML = intro + ps.map(cover).join('');
+function openNote(id) {
+  const p = ps.find(x => x.id === id), n = document.getElementById('note');
+  n.innerHTML = `<div class="nb"><button onclick="closeNote()">‹</button><div class="av">☾</div><b>药师推荐</b></div>
+    <div class="hero ${C[p.color]}"><img src="../${p.cut}" alt=""><span class="k">${p.key}</span></div>
+    <div class="body"><h2>${p.hook}</h2><p>${p.line}</p>
+    <div class="pr"><b>₩${p.price.toLocaleString()}</b><span>≈ ¥${cny(p.price)} · ${p.unit}</span></div>
+    <div class="hash">#${p.key} #韩国药店 #${p.typeZh}</div>
+    <div class="small">${p.caution.join(' · ')}<br><span lang="ko">${p.ko}</span></div></div>`;
+  n.scrollTop = 0; n.classList.add('open');
+}
+function closeNote() { document.getElementById('note').classList.remove('open'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>C · 一屏对比</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,"Noto Sans SC",sans-serif;background:#0E0C16;color:#fff;min-height:100svh;padding:calc(env(safe-area-inset-top) + 22px) 14px 20px;display:flex;flex-direction:column}
+.kick{font-size:13px;font-weight:800;letter-spacing:.14em;color:#FFD84D}
+h1{font-size:40px;font-weight:900;line-height:1.1;margin:6px 0 14px;letter-spacing:-.02em}
+.bento{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr auto;gap:10px;min-height:560px}
+.t{border-radius:26px;padding:14px;position:relative;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .15s}
+.t:active{transform:scale(.97)}
+.t .k{align-self:flex-start;font-size:13px;font-weight:900;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.22);color:#fff}
+.t h2{font-size:24px;font-weight:900;line-height:1.15;margin-top:8px;letter-spacing:-.01em}
+.t img{position:absolute;filter:drop-shadow(0 14px 18px rgba(0,0,0,.4))}
+.t .pr{margin-top:auto;align-self:flex-start;font-size:20px;font-weight:900;position:relative;z-index:2;background:rgba(0,0,0,.35);color:#fff;padding:6px 10px;border-radius:14px;backdrop-filter:blur(6px)}
+.t .pr small{display:block;font-size:13px;opacity:.75;font-weight:700}
+.big{grid-row:1 / span 2;background:#6C5CE7}
+.big h2{font-size:32px}
+.big img{height:56%;right:-6%;bottom:16%;transform:rotate(-8deg)}
+.g{background:#16A07A}.g img{height:62%;right:-12%;bottom:-6%;transform:rotate(8deg)}
+.a{background:#F0A020;color:#2B1700}.a .k{color:#fff}.a img{width:64%;right:-12%;bottom:-4%;transform:rotate(-6deg)}
+.g h2,.a h2{max-width:80%}
+.cmp{grid-column:1 / span 2;background:#1C1929;border-radius:26px;padding:14px 16px}
+.cmp .h{font-size:13px;font-weight:800;color:#9A93B0;letter-spacing:.1em}
+.row{display:flex;align-items:center;gap:10px;margin-top:10px}
+.row span{width:66px;font-size:13px;font-weight:800;white-space:nowrap}
+.row i{height:12px;border-radius:9px;display:block}
+.row b{font-size:15px;margin-left:auto;white-space:nowrap}
+.hint{text-align:center;font-size:13px;color:#77708a;margin-top:12px}
+
+.sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;color:#1a1626;border-radius:28px 28px 0 0;padding:14px 22px 30px;transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:9}
+.sheet.open{transform:none}
+.dim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:.3s;z-index:8}
+.dim.open{opacity:1;pointer-events:auto}
+.grab{width:44px;height:5px;border-radius:9px;background:#ddd;margin:0 auto 14px}
+.sheet .row2{display:flex;gap:16px;align-items:center}
+.sheet img{width:110px;max-height:150px;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(0,0,0,.2))}
+.sheet h3{font-size:28px;font-weight:900;line-height:1.15}
+.sheet p{font-size:19px;font-weight:700;margin-top:8px;line-height:1.45}
+.sheet .p2{font-size:34px;font-weight:900;margin-top:16px}.sheet .p2 span{font-size:16px;color:#888;font-weight:700;margin-left:6px}
+.sheet .n{font-size:13px;color:#999;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="kick">韩国药店 · 睡眠好物</div>
+<h1>睡不好？<br>选这个</h1>
+<div class="bento" id="bento"></div>
+<div class="hint">点卡片看详情</div>
+<div class="dim" id="dim" onclick="closeS()"></div>
+<div class="sheet" id="sheet"></div>
+<script src="../data.js"></script>
+<script>
+const ps = CATEGORIES[0].products, cls = ['big', 'g', 'a'], bar = ['#6C5CE7', '#16A07A', '#F0A020'];
+const cny = n => Math.round(n / RATE), max = Math.max(...ps.map(p => p.price));
+document.getElementById('bento').innerHTML = ps.map((p, i) => `<div class="t ${cls[i]}" onclick="openS(${i})">
+  <span class="k">${p.key}</span><h2>${p.br}</h2><img src="../${p.cut}" alt="">
+  <div class="pr">₩${p.price.toLocaleString()}<small>≈ ¥${cny(p.price)}</small></div></div>`).join('') +
+  `<div class="cmp"><div class="h">价格对比</div>${ps.map((p, i) => `<div class="row"><span>${p.key}</span>
+  <i style="width:${Math.round(p.price / max * 100)}%;max-width:40%;background:${bar[i]}"></i><b>₩${p.price.toLocaleString()} <small style="opacity:.6">/ ${p.unit}</small></b></div>`).join('')}</div>`;
+function openS(i) {
+  const p = ps[i];
+  document.getElementById('sheet').innerHTML = `<div class="grab"></div><div class="row2"><img src="../${p.cut}" alt="">
+    <div><h3>${p.hook}</h3><p>${p.line}</p></div></div>
+    <div class="p2">₩${p.price.toLocaleString()}<span>≈ ¥${cny(p.price)} · ${p.unit}</span></div>
+    <div class="n">${p.typeZh} · ${p.caution.join(' · ')}<br><span lang="ko">${p.ko}</span></div>`;
+  document.getElementById('sheet').classList.add('open'); document.getElementById('dim').classList.add('open');
+}
+function closeS() { document.getElementById('sheet').classList.remove('open'); document.getElementById('dim').classList.remove('open'); }
+</script>
+</body>
+</html>

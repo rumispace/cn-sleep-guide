@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>A · 全屏刷</title>
+<style>
+*{box-sizing:border-box;margin:0}
+html{scroll-snap-type:y mandatory;overflow-y:scroll;background:#111}
+body{font-family:system-ui,"Noto Sans SC",sans-serif;color:#1a1626}
+section{height:100svh;scroll-snap-align:start;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 28px) 24px 28px}
+.cover{background:#FFF3EC}
+.cover .kick{font-size:15px;font-weight:700;color:#FF2D55;letter-spacing:.1em}
+.cover h1{font-size:64px;line-height:1.05;font-weight:900;margin-top:12px;letter-spacing:-.02em}
+.cover h1 em{font-style:normal;background:linear-gradient(transparent 58%,#FFD84D 58%)}
+.cover p{font-size:20px;margin-top:14px;color:#5a5366;font-weight:600}
+.fan{position:relative;flex:1;margin-top:10px}
+.fan img{position:absolute;filter:drop-shadow(0 18px 24px rgba(40,20,60,.28))}
+.fan .f1{height:62%;left:4%;bottom:6%;transform:rotate(-10deg)}
+.fan .f2{height:46%;left:34%;bottom:20%;transform:rotate(4deg)}
+.fan .f3{width:52%;right:0;bottom:2%;transform:rotate(9deg)}
+.swipe{text-align:center;font-size:15px;font-weight:700;color:#8a8296;animation:up 1.6s ease-in-out infinite}
+@keyframes up{50%{transform:translateY(-8px)}}
+
+.p .no{font-size:14px;font-weight:800;letter-spacing:.16em;opacity:.55}
+.p h2{font-size:52px;line-height:1.1;font-weight:900;margin-top:8px;letter-spacing:-.02em}
+.p .line{font-size:22px;font-weight:700;margin-top:12px;line-height:1.4}
+.p .stage{flex:1;position:relative;display:flex;align-items:center;justify-content:center;min-height:0}
+.p .stage img{max-width:78%;max-height:92%;filter:drop-shadow(0 24px 30px rgba(0,0,0,.3));transform:rotate(-4deg)}
+.sticker{position:absolute;right:2px;top:10%;background:#FF2D55;color:#fff;font-weight:900;font-size:22px;padding:12px 16px;border-radius:999px;transform:rotate(10deg);box-shadow:0 6px 0 rgba(0,0,0,.15)}
+.bar{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.price b{font-size:44px;font-weight:900;letter-spacing:-.02em}
+.price span{display:block;font-size:17px;font-weight:700;opacity:.7}
+.type{font-size:15px;font-weight:800;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.7)}
+.note{font-size:13px;opacity:.6;margin-top:10px}
+.ko{font-size:12px;opacity:.55;margin-top:6px}
+.purple{background:#E9E4FF;color:#2A1F78}.green{background:#DDF3E8;color:#0B4A38}.amber{background:#FFEBC8;color:#5C3300}
+.dots{position:fixed;right:10px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:9}
+.dots i{width:6px;height:6px;border-radius:9px;background:rgba(0,0,0,.25);transition:.25s}
+.dots i.on{height:22px;background:#FF2D55}
+
+.sum{background:#1a1626;color:#fff}
+.sum h2{font-size:40px;font-weight:900;line-height:1.15}
+.rows{margin-top:22px;display:flex;flex-direction:column;gap:12px;flex:1;justify-content:center}
+.r{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.08);border-radius:20px;padding:12px 14px;text-decoration:none;color:#fff}
+.r img{width:64px;height:64px;object-fit:contain}
+.r b{font-size:22px;display:block}.r small{font-size:15px;opacity:.7}
+.r .k{margin-left:auto;font-size:14px;font-weight:800;padding:6px 10px;border-radius:99px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="dots" id="dots"></div>
+<main id="app"></main>
+<script src="../data.js"></script>
+<script>
+const ps = CATEGORIES[0].products, C = { purple: 'purple', teal: 'green', amber: 'amber' };
+const kc = { purple: '#6C5CE7', teal: '#16A07A', amber: '#F0A020' };
+const cny = n => Math.round(n / RATE);
+let h = `<section class="cover"><div class="kick">韩国药店 · 睡眠好物</div>
+  <h1>睡不好？<br><em>3款</em>挑一个</h1><p>按你的情况，一秒选对</p>
+  <div class="fan"><img class="f1" src="../${ps[0].cut}"><img class="f2" src="../${ps[1].cut}"><img class="f3" src="../${ps[2].cut}"></div>
+  <div class="swipe">↑ 上滑看看</div></section>`;
+h += ps.map((p, i) => `<section class="p ${C[p.color]}" id="${p.id}">
+  <div class="no">0${i + 1} / 0${ps.length}</div><h2>${p.br}</h2><div class="line">${p.line}</div>
+  <div class="stage"><img src="../${p.cut}" alt=""><div class="sticker">${p.key}</div></div>
+  <div class="bar"><div class="price"><b>₩${p.price.toLocaleString()}</b><span>≈ ¥${cny(p.price)} · ${p.unit}</span></div><div class="type">${p.typeZh}</div></div>
+  <div class="note">${p.caution.join(' · ')}</div><div class="ko" lang="ko">${p.ko}</div></section>`).join('');
+h += `<section class="sum"><div class="kick" style="color:#FF5C7A;font-weight:800;letter-spacing:.1em">一张看懂</div><h2>你是哪一种？</h2>
+  <div class="rows">${ps.map(p => `<a class="r" href="#${p.id}"><img src="../${p.cut}"><div><b>${p.hook}</b><small>₩${p.price.toLocaleString()} ≈ ¥${cny(p.price)}</small></div><span class="k" style="background:${kc[p.color]}">${p.key}</span></a>`).join('')}</div></section>`;
+document.getElementById('app').innerHTML = h;
+const secs = [...document.querySelectorAll('section')], dots = document.getElementById('dots');
+dots.innerHTML = secs.map(() => '<i></i>').join('');
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) [...dots.children].forEach((d, i) => d.classList.toggle('on', secs[i] === e.target)); }), { threshold: .6 });
+secs.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
