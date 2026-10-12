@@ -13,6 +13,7 @@ const CATEGORIES = [
     products: [
       {
         id: "ezquil",
+        symptoms: ["躺下半天睡不着", "倒时差，晚上睡不着"], tag: "睡不着 · 倒时差", nameKo: "이지퀼나잇",
         hook: "今晚就想睡？", br: "今晚<br>就想睡？", line: "喝一袋，困意自己来", key: "快速入睡", cut: "img/cut/ezquil.webp",
         img: "img/ezquil.jpg",
         color: "purple",
@@ -28,7 +29,8 @@ const CATEGORIES = [
       },
       {
         id: "sanzoin",
-        hook: "累到睡不着？", br: "累到<br>睡不着？", line: "千年古方酸枣仁汤，<br>养好再睡", key: "身心调理", cut: "img/cut/sanzoin.webp",
+        symptoms: ["睡了像没睡，不解乏", "半夜总是醒"], tag: "睡不深 · 容易醒", nameKo: "산조인탕정",
+        hook: "累到睡不着？", br: "累到<br>睡不着？", line: "千年古方酸枣仁汤，<br>一觉睡到天亮", key: "睡得更踏实", cut: "img/cut/sanzoin.webp",
         img: "img/sanzoin.jpg",
         color: "teal",
         want: "累了反而睡不着",
@@ -43,7 +45,8 @@ const CATEGORIES = [
       },
       {
         id: "melachew",
-        hook: "褪黑素党看这里", br: "褪黑素党<br>看这里", line: "一粒 2mg，蓝莓薰衣草味", key: "含褪黑素", cut: "img/cut/melachew.webp",
+        symptoms: ["想吃褪黑素", "每晚习惯来一颗"], tag: "想要褪黑素", nameKo: "멜라츄 2mg",
+        hook: "褪黑素党看这里", br: "褪黑素党<br>看这里", line: "一粒 2mg，蓝莓薰衣草味", key: "褪黑素软糖", cut: "img/cut/melachew.webp",
         img: "img/melachew.jpg",
         color: "amber",
         want: "习惯吃褪黑素",
